@@ -24,7 +24,7 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(captureScreen: (NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject) 
+                  reject:(RCTPromiseRejectBlock)reject)
 {
   [self captureRef: [NSNumber numberWithInt:-1] withOptions:options resolve:resolve reject:reject];
 }
@@ -106,7 +106,7 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
     }
 
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
-    
+
     success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, size} afterScreenUpdates:YES];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -153,10 +153,20 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       }
       else {
         // Save to a temp file
-        NSString *path = RCTTempFilePath(format, &error);
-        if (path && !error) {
-          if ([data writeToFile:path options:(NSDataWritingOptions)0 error:&error]) {
-            res = path;
+        // NSString *path = RCTTempFilePath(format, &error);
+        // if (path && !error) {
+        //   if ([data writeToFile:path options:(NSDataWritingOptions)0 error:&error]) {
+        //     res = path;
+        //   }
+        // }
+        NSString *documentpath = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        int timeStampObj = [[NSNumber numberWithDouble: timeStamp] intValue];
+        NSString *newPath = [NSString stringWithFormat:@"%@preview_%d.%@",documentpath,timeStampObj, format];
+        NSURL *url = [NSURL URLWithString:newPath];
+        if (documentpath) {
+          if ([data writeToURL:url options:(NSDataWritingOptions)0 error:&error]) {
+            res = [newPath substringFromIndex: 7];
           }
         }
       }

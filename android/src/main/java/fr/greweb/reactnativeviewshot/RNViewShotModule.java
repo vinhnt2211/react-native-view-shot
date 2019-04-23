@@ -111,7 +111,7 @@ public class RNViewShotModule extends ReactContextBaseJavaModule {
         captureRef(-1, options, promise);
     }
 
-    private static final String TEMP_FILE_PREFIX = "ReactNative-snapshot-image";
+    private static final String TEMP_FILE_PREFIX = "preview_";
 
     /**
      * Asynchronous task that cleans up cache dirs (internal and, if available, external) of cropped
@@ -164,21 +164,26 @@ public class RNViewShotModule extends ReactContextBaseJavaModule {
      */
     @NonNull
     private File createTempFile(@NonNull final Context context, @NonNull final String ext) throws IOException {
-        final File externalCacheDir = context.getExternalCacheDir();
-        final File internalCacheDir = context.getCacheDir();
-        final File cacheDir;
-
-        if (externalCacheDir == null && internalCacheDir == null) {
-            throw new IOException("No cache directory available");
-        }
-
-        if (externalCacheDir == null) {
-            cacheDir = internalCacheDir;
-        } else if (internalCacheDir == null) {
-            cacheDir = externalCacheDir;
-        } else {
-            cacheDir = externalCacheDir.getFreeSpace() > internalCacheDir.getFreeSpace() ?
-                    externalCacheDir : internalCacheDir;
+        // final File externalCacheDir = context.getExternalCacheDir();
+        // final File internalCacheDir = context.getCacheDir();
+        // final File cacheDir;
+        //
+        // if (externalCacheDir == null && internalCacheDir == null) {
+        //     throw new IOException("No cache directory available");
+        // }
+        //
+        // if (externalCacheDir == null) {
+        //     cacheDir = internalCacheDir;
+        // } else if (internalCacheDir == null) {
+        //     cacheDir = externalCacheDir;
+        // } else {
+        //     cacheDir = externalCacheDir.getFreeSpace() > internalCacheDir.getFreeSpace() ?
+        //             externalCacheDir : internalCacheDir;
+        // }
+        //
+        final File cacheDir = new File(context.getFilesDir(),"mydir");
+        if(!cacheDir.exists()){
+          cacheDir.mkdir();
         }
 
         final String suffix = "." + ext;

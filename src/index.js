@@ -200,7 +200,7 @@ export default class ViewShot extends Component<Props> {
     if (!this.root) return;
     if (this.lastCapturedURI) {
       // schedule releasing the previous capture
-      setTimeout(releaseCapture, 500, this.lastCapturedURI);
+      // setTimeout(releaseCapture, 500, this.lastCapturedURI);
     }
     this.lastCapturedURI = uri;
     const { onCapture } = this.props;
